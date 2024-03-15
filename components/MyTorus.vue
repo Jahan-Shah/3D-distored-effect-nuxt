@@ -15,7 +15,7 @@ onLoop(() => {
   }
 })
 
-const { thickness, roughness, transmission, ior, backside, chromaticAberration } = useControls({
+const { thickness, roughness, transmission, ior, backside } = useControls({
   thickness: { value: 0.2, min: 0, max: 3, step: 0.05 },
   roughness: { value: 0, min: 0, max: 1, step: 0.1 },
   transmission: { value: 1, min: 0, max: 1, step: 0.1 },
@@ -27,14 +27,18 @@ const side = computed(() => backside.value.value ? BackSide : FrontSide)
 </script>
 
 <template>
-  <Text3D :scale font="/fonts/PPNeueMontreal-Bold.json" :curveSegments="10" :size="0.28" :position="[0, 0, -1]"
-    :bevelEnabled="false" :height="0">
-    hello world!
-    <TresMeshBasicMaterial />
-  </Text3D>
-  <primitive ref="torusRef" :scale :object="nodes.Torus002">
-    <TresMeshPhysicalMaterial :side :thickness="thickness.value" :roughness="roughness.value"
-      :transmission="transmission.value" :ior="ior.value">
-    </TresMeshPhysicalMaterial>
-  </primitive>
+  <TresGroup :scale>
+    <Suspense>
+      <Text3D font="/fonts/PPNeueMontreal-Bold.json" :curveSegments="10" :size="0.28" :position="[0, 0, -1]"
+        :bevelEnabled="false" :height="0">
+        hello world!
+        <TresMeshBasicMaterial />
+      </Text3D>
+    </Suspense>
+    <primitive ref="torusRef" :object="nodes.Torus002">
+      <TresMeshPhysicalMaterial :side :thickness="thickness.value" :roughness="roughness.value"
+        :transmission="transmission.value" :ior="ior.value">
+      </TresMeshPhysicalMaterial>
+    </primitive>
+  </TresGroup>
 </template>
